@@ -1,6 +1,39 @@
 <?php
 
 /**
+ * User Parents Functions
+ *
+ * @package Plugins/Users/Parents/Functions
+ */
+
+// Exit if accessed directly
+defined( 'ABSPATH' ) || exit;
+
+/**
+ * Return the User Profile section to use
+ *
+ * @since 0.1.0
+ *
+ * @return string
+ */
+function wp_get_user_parents_section() {
+	return apply_filters( 'wp_get_user_parents_section', 'account' );
+}
+
+/**
+ * Return the User Profile section to use
+ *
+ * @since 0.1.0
+ *
+ * @return string
+ */
+function wp_get_user_parents_section_hook() {
+	$section = wp_get_user_parents_section();
+
+	return "wp_user_profiles_add_{$section}_meta_boxes";
+}
+
+/**
  * Return an array of user parents
  *
  * @since 0.1.0
