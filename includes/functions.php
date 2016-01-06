@@ -85,7 +85,7 @@ function wp_get_user_pending_children( $user_id = 0 ) {
 		$ids = array();
 	}
 
-	return apply_filters( 'wp_get_user_pending_children', $parents, $user_id );
+	return apply_filters( 'wp_get_user_pending_children', $ids, $user_id );
 }
 
 /**
@@ -214,6 +214,16 @@ function wp_user_parents_register_metadata() {
  * @since 0.1.0
  */
 function wp_user_parents_save_meta_data( $user_id = 0 ) {
+
+	// Bail if no page
+	if ( empty( $_GET['page'] ) ) {
+		return;
+	}
+
+	// Bail if not saving the 'account' section
+	if ( sanitize_key( $_GET['page'] ) !== 'account' ) {
+		return;
+	}
 
 	/** Parents ***************************************************************/
 
