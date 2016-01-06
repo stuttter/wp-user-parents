@@ -46,15 +46,16 @@ function wp_user_parents_metabox( $user = false ) {
 
 		<?php
 
+		// Start an output buffer
+		ob_start();
+
 		// Parents row
 		wp_user_profiles_do_row( array(
 			'user'       => $user,
 			'type'       => 'parents',
 			'parent_ids' => $parent_ids,
 			'child_ids'  => $child_ids
-		) ); ?>
-
-		<?php
+		) );
 
 		// Children row
 		wp_user_profiles_do_row( array(
@@ -62,7 +63,17 @@ function wp_user_parents_metabox( $user = false ) {
 			'type'       => 'children',
 			'parent_ids' => $parent_ids,
 			'child_ids'  => $child_ids
-		) ); ?>
+		) );
+
+		// Get the rows
+		$rows = ob_get_clean();
+
+		// Output rows, or message why there are no rows
+		if ( ! empty( $rows ) ) :
+			echo $rows;
+		else :
+			?><tr><td colspan="2"><?php esc_html_e( 'This account currently has no available relationship options.', 'wp-user-parents' ); ?></td></tr><?php
+		endif; ?>
 
 	</table>
 
@@ -82,7 +93,6 @@ function wp_user_profiles_do_row( $args = array() ) {
 	$r = wp_parse_args( $args, array(
 		'user'       => false,
 		'type'       => '',
-		'style'      => 'view',
 		'parent_ids' => array(),
 		'child_ids'  => array()
 	) );
@@ -107,9 +117,6 @@ function wp_user_profiles_do_row( $args = array() ) {
 	// User can edit parents
 	if ( current_user_can( "edit_user_{$r['type']}", $r['user'] ) ) {
 
-		// Set row style
-		$r['style'] = 'edit';
-
 		// Get users
 		$r['users'] = call_user_func( "wp_get_eligable_user_{$r['type']}", array(
 			'exclude' => array_merge( $r[ $op_ids ], array( $r['user']->ID ) )
@@ -123,6 +130,10 @@ function wp_user_profiles_do_row( $args = array() ) {
 	// User can view parents
 	} elseif ( current_user_can( "view_user_{$r['type']}", $r['user'] ) ) {
 		$r['users'] = wp_user_parents_get_specific_users( $r[ $cur_ids ] );
+
+	// User can neither edit nor view, so return
+	} else {
+		return;
 	}
 
 	// Set current IDs, used for selecting current users
@@ -145,7 +156,6 @@ function wp_user_parents_output_row( $args = array() ) {
 	$r = wp_parse_args( $args, array(
 		'user'    => false,
 		'type'    => '',
-		'style'   => 'view',
 		'cur_ids' => array(),
 		'users'   => array()
 	) );
@@ -154,52 +164,43 @@ function wp_user_parents_output_row( $args = array() ) {
 	$labels = wp_user_parents_get_row_labels( $r['type'] );
 
 	// Start the output buffer
-	ob_start(); ?>
+	ob_start();
 
-	<tr class="user-<?php echo esc_attr( $r['type'] ); ?>-wrap">
+	?><tr class="user-<?php echo esc_attr( $r['type'] ); ?>-wrap"><?php
 
-	<?php
+	// Edit
+	if ( current_user_can( "edit_user_{$r['type']}", $r['user'] ) ) :
 
-	// Which style?
-	switch ( $r['style'] ) {
-		case 'edit' :
+		// Users to list
+		if ( ! empty( $r['users'] ) ) :
 
-			// Users to list
-			if ( ! empty( $r['users'] ) ) :
+			?><th><label for="wp_user_<?php echo esc_attr( $r['type'] ); ?>[]"><?php echo esc_html( $labels['label'] ); ?></label></th>
+			<td>
+				<select data-placeholder="<?php echo esc_html( $labels['select'] ); ?>" name="wp_user_<?php echo esc_attr( $r['type'] ); ?>[]" id="wp_user_<?php echo esc_attr( $r['type'] ); ?>" multiple="multiple"><?php
 
-				?><th><label for="wp_user_<?php echo esc_attr( $r['type'] ); ?>[]"><?php echo esc_html( $labels['label'] ); ?></label></th>
-				<td>
-					<select data-placeholder="<?php echo esc_html( $labels['select'] ); ?>" name="wp_user_<?php echo esc_attr( $r['type'] ); ?>[]" id="wp_user_<?php echo esc_attr( $r['type'] ); ?>" multiple="multiple"><?php
+					foreach ( $r['users'] as $_user ) :
 
-						foreach ( $r['users'] as $_user ) :
+						?><option value="<?php echo esc_attr( $_user->ID ); ?>" <?php selected( in_array( $_user->ID, $r['cur_ids'] ) ); ?>><?php echo esc_html( wp_user_parents_prefer_fullname( $_user ) ); ?></option><?php
 
-							?><option value="<?php echo esc_attr( $_user->ID ); ?>" <?php selected( in_array( $_user->ID, $r['cur_ids'] ) ); ?>><?php echo esc_html( wp_user_parents_prefer_fullname( $_user ) ); ?></option><?php
+					endforeach;
 
-						endforeach;
+				?></select>
+			</td><?php
 
-					?></select>
-				</td><?php
+		// No users to list
+		else : ?><th><label><?php echo esc_html( $labels['label'] ); ?></label></th>
+			<td><?php echo $labels['empty']; ?></td><?php
+		endif;
 
-			// No users to list
-			else : ?><th><label><?php echo esc_html( $labels['label'] ); ?></label></th>
-				<td><?php echo $labels['empty']; ?></td><?php
+	// View
+	else :
+		?><th><label><?php echo esc_html( $labels['label'] ); ?></label></th>
+		<td><?php echo ( ! empty( $r['users'] ) )
+				? implode( '<br>', array_map( 'wp_user_parents_prefer_fullname', $r['users'] ) )
+				: $labels['no']; ?></td><?php
+	endif;
 
-			endif;
-
-			break;
-		case 'view' :
-		default     :
-			?><th><label><?php echo esc_html( $labels['label'] ); ?></label></th>
-			<td><?php echo ( ! empty( $r['users'] ) )
-					? implode( '<br>', array_map( 'wp_user_parents_prefer_fullname', $r['users'] ) )
-					: $labels['no']; ?></td><?php
-
-			break;
-	} ?>
-
-	</tr>
-
-	<?php
+	?></tr><?php
 
 	// Flush the current output buffer
 	ob_end_flush();
