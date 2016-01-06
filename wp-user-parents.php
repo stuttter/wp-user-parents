@@ -24,6 +24,7 @@ function _wp_user_parents() {
 	$plugin_path = plugin_dir_path( __FILE__ );
 
 	// Required Files
+	require_once $plugin_path . 'includes/capabilities.php';
 	require_once $plugin_path . 'includes/functions.php';
 	require_once $plugin_path . 'includes/metaboxes.php';
 	require_once $plugin_path . 'includes/hooks.php';

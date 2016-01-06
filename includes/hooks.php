@@ -18,3 +18,6 @@ add_action( 'wp_user_profiles_add_account_meta_boxes', 'wp_user_parents_add_meta
 // Save User Profile
 add_action( 'personal_options_update',  'wp_user_parents_save_meta_data' );
 add_action( 'edit_user_profile_update', 'wp_user_parents_save_meta_data' );
+
+// Filter meta capabilities
+add_filter( 'map_meta_cap', 'wp_user_parents_map_meta_cap', 10, 4 );
