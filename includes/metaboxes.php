@@ -47,7 +47,7 @@ function wp_user_parents_metabox( $user = false ) {
 		<?php
 
 		// Parents row
-		wp_user_profiles_prepare_row( array(
+		wp_user_profiles_do_row( array(
 			'user'       => $user,
 			'type'       => 'parents',
 			'parent_ids' => $parent_ids,
@@ -57,7 +57,7 @@ function wp_user_parents_metabox( $user = false ) {
 		<?php
 
 		// Children row
-		wp_user_profiles_prepare_row( array(
+		wp_user_profiles_do_row( array(
 			'user'       => $user,
 			'type'       => 'children',
 			'parent_ids' => $parent_ids,
@@ -76,7 +76,7 @@ function wp_user_parents_metabox( $user = false ) {
  *
  * @param  array  $args
  */
-function wp_user_profiles_prepare_row( $args = array() ) {
+function wp_user_profiles_do_row( $args = array() ) {
 
 	// Parse arguments
 	$r = wp_parse_args( $args, array(
@@ -128,38 +128,8 @@ function wp_user_profiles_prepare_row( $args = array() ) {
 	// Set current IDs, used for selecting current users
 	$r['cur_ids'] = $r[ $cur_ids ];
 
-	// Do the row
-	wp_user_parents_do_row( $r );
-}
-
-/**
- * Return an array of users, based on array of user IDs passed in
- *
- * @since 0.1.0
- *
- * @param  array  $user_ids
- * @return array
- */
-function wp_user_parents_get_specific_users( $user_ids = array() ) {
-
-	// Bail if no user IDs passed
-	if ( empty( $user_ids ) ) {
-		return array();
-	}
-
-	// Return users
-	$users = get_users( array(
-		'include' => $user_ids,
-		'orderby' => 'display_name'
-	) );
-
-	// Bail if no users found
-	if ( is_wp_error( $users ) || empty( $users ) ) {
-		return array();
-	}
-
-	// Return users
-	return $users;
+	// Output the row
+	wp_user_parents_output_row( $r );
 }
 
 /**
@@ -169,7 +139,7 @@ function wp_user_parents_get_specific_users( $user_ids = array() ) {
  *
  * @param array $args
  */
-function wp_user_parents_do_row( $args = array() ) {
+function wp_user_parents_output_row( $args = array() ) {
 
 	// Parse arguments
 	$r = wp_parse_args( $args, array(
@@ -233,6 +203,36 @@ function wp_user_parents_do_row( $args = array() ) {
 
 	// Flush the current output buffer
 	ob_end_flush();
+}
+
+/**
+ * Return an array of users, based on array of user IDs passed in
+ *
+ * @since 0.1.0
+ *
+ * @param  array  $user_ids
+ * @return array
+ */
+function wp_user_parents_get_specific_users( $user_ids = array() ) {
+
+	// Bail if no user IDs passed
+	if ( empty( $user_ids ) ) {
+		return array();
+	}
+
+	// Return users
+	$users = get_users( array(
+		'include' => $user_ids,
+		'orderby' => 'display_name'
+	) );
+
+	// Bail if no users found
+	if ( is_wp_error( $users ) || empty( $users ) ) {
+		return array();
+	}
+
+	// Return users
+	return $users;
 }
 
 /**
