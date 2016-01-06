@@ -53,6 +53,14 @@ function wp_user_parents_metabox( $user = false ) {
 				'exclude' => array_merge( $child_ids, array( $user->ID ) )
 			) );
 
+			// Fallback for empty children but not empty child IDs
+			if ( empty( $parents ) && ! empty( $parent_ids ) ) {
+				$parents = get_users( array(
+					'include' => $parent_ids,
+					'orderby' => 'display_name'
+				) );
+			}
+
 			// Only show parents if there are parents to show
 			if ( ! empty( $parents ) ) : ?>
 
@@ -82,6 +90,15 @@ function wp_user_parents_metabox( $user = false ) {
 				'exclude' => array_merge( $parent_ids, array( $user->ID ) )
 			) );
 
+			// Fallback for empty children but not empty child IDs
+			if ( empty( $children ) && ! empty( $child_ids ) ) {
+				$children = get_users( array(
+					'include' => $child_ids,
+					'orderby' => 'display_name'
+				) );
+			}
+
+			// Only show if there are children to show
 			if ( ! empty( $children ) ) : ?>
 
 				<tr class="user-url-wrap">

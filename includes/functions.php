@@ -136,7 +136,7 @@ function wp_get_eligable_user_parents( $args = array() ) {
 	// Parse arguments
 	$r = wp_parse_args( $args, array(
 		'number'  => -1,
-		'orderby' => 'display_name'		
+		'orderby' => 'display_name'
 	) );
 
 	// Filter arguments
@@ -160,7 +160,7 @@ function wp_get_eligable_user_children( $args = array() ) {
 	// Parse arguments
 	$r = wp_parse_args( $args, array(
 		'number'  => -1,
-		'orderby' => 'display_name'		
+		'orderby' => 'display_name'
 	) );
 
 	// Filter arguments
@@ -227,7 +227,9 @@ function wp_user_parents_save_meta_data( $user_id = 0 ) {
 
 	// Add user metas
 	foreach ( $posted_parent_ids as $id ) {
-		add_user_meta( $user_id, 'user_parent', $id, false );
+		if ( ! wp_is_user_parent_of_user( $id, $user_id ) ) {
+			add_user_meta( $user_id, 'user_parent', $id, false );
+		}
 	}
 
 	/** Children **************************************************************/
@@ -245,7 +247,9 @@ function wp_user_parents_save_meta_data( $user_id = 0 ) {
 
 	// Add user metas
 	foreach ( $posted_children_ids as $id ) {
-		add_user_meta( $id, 'user_parent', $user_id, false );
+		if ( ! wp_is_user_child_of_user( $user_id, $id ) ) {
+			add_user_meta( $id, 'user_parent', $user_id, false );
+		}
 	}
 }
 
