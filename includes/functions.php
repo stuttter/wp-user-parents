@@ -156,7 +156,7 @@ function wp_is_user_child_of_user( $child = 0, $parent = 0 ) {
 }
 
 /**
- * Retrieve an array of users that are eligable to be user parents
+ * Retrieve an array of users that are eligible to be user parents
  *
  * @since 0.1.0
  *
@@ -164,7 +164,7 @@ function wp_is_user_child_of_user( $child = 0, $parent = 0 ) {
  *
  * @return array
  */
-function wp_get_eligable_user_parents( $args = array() ) {
+function wp_get_eligible_user_parents( $args = array() ) {
 
 	// Parse arguments
 	$r = wp_parse_args( $args, array(
@@ -173,14 +173,14 @@ function wp_get_eligable_user_parents( $args = array() ) {
 	) );
 
 	// Filter arguments
-	$r = apply_filters( 'wp_get_eligable_user_parents', $r, $args );
+	$r = apply_filters( 'wp_get_eligible_user_parents', $r, $args );
 
 	// Return users
 	return get_users( $r );
 }
 
 /**
- * Retrieve an array of users that are eligable to be user children
+ * Retrieve an array of users that are eligible to be user children
  *
  * @since 0.1.0
  *
@@ -188,7 +188,7 @@ function wp_get_eligable_user_parents( $args = array() ) {
  *
  * @return array
  */
-function wp_get_eligable_user_children( $args = array() ) {
+function wp_get_eligible_user_children( $args = array() ) {
 
 	// Parse arguments
 	$r = wp_parse_args( $args, array(
@@ -197,7 +197,7 @@ function wp_get_eligable_user_children( $args = array() ) {
 	) );
 
 	// Filter arguments
-	$r = apply_filters( 'wp_get_eligable_user_children', $r, $args );
+	$r = apply_filters( 'wp_get_eligible_user_children', $r, $args );
 
 	// Return users
 	return get_users( $r );
