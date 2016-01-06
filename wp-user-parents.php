@@ -13,6 +13,9 @@
  * Domain Path: /assets/lang/
  */
 
+// Exit if accessed directly
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Enqueue assets
  *
@@ -24,6 +27,7 @@ function _wp_user_parents() {
 	$plugin_path = plugin_dir_path( __FILE__ );
 
 	// Required Files
+	require_once $plugin_path . 'includes/admin.php';
 	require_once $plugin_path . 'includes/capabilities.php';
 	require_once $plugin_path . 'includes/functions.php';
 	require_once $plugin_path . 'includes/metaboxes.php';
@@ -50,5 +54,5 @@ function wp_user_parents_get_plugin_url() {
  * @return int
  */
 function wp_user_parents_get_asset_version() {
-	return 201601050001;
+	return 201601060001;
 }

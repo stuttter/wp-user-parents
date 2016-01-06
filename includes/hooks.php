@@ -21,3 +21,6 @@ add_filter( 'map_meta_cap', 'wp_user_parents_map_meta_cap', 10, 4 );
 
 // Add "Relationships" meta box
 add_action( wp_get_user_parents_section_hook(), 'wp_user_parents_add_meta_boxes', 10, 2 );
+
+// Enqueue assets
+add_action( 'admin_enqueue_scripts', 'wp_user_parents_admin_assets' );
