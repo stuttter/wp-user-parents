@@ -10,7 +10,9 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 
 == Description ==
 
-WP User Profiles is a sophisticated way to edit users in WordPress.
+Allows parent users to manage their children.
+
+Think of WP User Parents as a user delegation system for WordPress. Users can appoint other users as 'parents' that have control over their account, viewing their profile, and acting on their behalf.
 
 = Also checkout =
 

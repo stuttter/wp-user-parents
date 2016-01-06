@@ -1,6 +1,8 @@
 # WP User Parents
 
-WP User Parents allows parent users to manage their children.
+Allows parent users to manage their children.
+
+Think of WP User Parents as a user delegation system for WordPress. Users can appoint other users as 'parents' that have control over their account, viewing their profile, and acting on their behalf.
 
 # Installation
 
