@@ -21,7 +21,7 @@ function wp_user_parents_add_meta_boxes( $type = '', $user = '' ) {
 		'wp_user_parents_metabox',
 		$type,
 		'normal',
-		'high',
+		'core',
 		$user
 	);
 }
