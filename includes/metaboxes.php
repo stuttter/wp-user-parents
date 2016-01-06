@@ -15,11 +15,9 @@ defined( 'ABSPATH' ) || exit;
  * @since 1.0.0
  */
 function wp_user_parents_add_meta_boxes( $type = '', $user = '' ) {
-
-	// Add metabox
 	add_meta_box(
 		'wp_user_parents',
-		__( 'Parents', 'wp-user-parents' ),
+		__( 'Relationships', 'wp-user-parents' ),
 		'wp_user_parents_metabox',
 		$type,
 		'normal',
@@ -51,10 +49,8 @@ function wp_user_parents_metabox( $user = false ) {
 		<?php if ( apply_filters( 'wp_user_can_have_parents', true, $user ) ) :
 
 			// Get child user objects
-			$parents = get_users( array(
-				'exclude' => array_merge( $child_ids, array( $user->ID ) ),
-				'number'  => -1,
-				'orderby' => 'display_name'
+			$parents = wp_get_eligable_user_parents( array(
+				'exclude' => array_merge( $child_ids, array( $user->ID ) )
 			) );
 
 			// Only show parents if there are parents to show
@@ -67,7 +63,7 @@ function wp_user_parents_metabox( $user = false ) {
 
 							<?php foreach ( $parents as $parent ) : ?>
 
-								<option value="<?php echo esc_attr( $parent->ID ); ?>" <?php selected( in_array( $parent->ID, $parent_ids ) ); ?>><?php echo esc_html( $parent->display_name ); ?></option>
+								<option value="<?php echo esc_attr( $parent->ID ); ?>" <?php selected( in_array( $parent->ID, $parent_ids ) ); ?>><?php echo esc_html( wp_user_parents_prefer_fullname( $parent ) ); ?></option>
 
 							<?php endforeach; ?>
 
@@ -82,12 +78,10 @@ function wp_user_parents_metabox( $user = false ) {
 		<?php if ( apply_filters( 'wp_user_can_have_children', true, $user ) ) :
 
 			// Get child user objects
-			$children = get_users( array(
-				'exclude' => array_merge( $parent_ids, array( $user->ID ) ),
-				'number'  => -1,
-				'orderby' => 'display_name'
+			$children = wp_get_eligable_user_children( array(
+				'exclude' => array_merge( $parent_ids, array( $user->ID ) )
 			) );
-		
+
 			if ( ! empty( $children ) ) : ?>
 
 				<tr class="user-url-wrap">
@@ -97,7 +91,7 @@ function wp_user_parents_metabox( $user = false ) {
 
 							<?php foreach ( $children as $child ) : ?>
 
-								<option value="<?php echo esc_attr( $child->ID ); ?>" <?php selected( in_array( $child->ID, $child_ids ) ); ?>><?php echo esc_html( $child->display_name ); ?></option>
+								<option value="<?php echo esc_attr( $child->ID ); ?>" <?php selected( in_array( $child->ID, $child_ids ) ); ?>><?php echo esc_html( wp_user_parents_prefer_fullname( $child ) ); ?></option>
 
 							<?php endforeach; ?>
 
@@ -106,7 +100,7 @@ function wp_user_parents_metabox( $user = false ) {
 				</tr>
 
 			<?php endif; ?>
-				
+
 		<?php endif; ?>
 
 	</table>

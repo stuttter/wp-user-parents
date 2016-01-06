@@ -123,6 +123,82 @@ function wp_is_user_child_of_user( $child = 0, $parent = 0 ) {
 }
 
 /**
+ * Retrieve an array of users that are eligable to be user parents
+ *
+ * @since 0.1.0
+ *
+ * @param  array  $args
+ *
+ * @return array
+ */
+function wp_get_eligable_user_parents( $args = array() ) {
+
+	// Parse arguments
+	$r = wp_parse_args( $args, array(
+		'number'  => -1,
+		'orderby' => 'display_name'		
+	) );
+
+	// Filter arguments
+	$r = apply_filters( 'wp_get_eligable_user_parents', $r, $args );
+
+	// Return users
+	return get_users( $r );
+}
+
+/**
+ * Retrieve an array of users that are eligable to be user children
+ *
+ * @since 0.1.0
+ *
+ * @param  array  $args
+ *
+ * @return array
+ */
+function wp_get_eligable_user_children( $args = array() ) {
+
+	// Parse arguments
+	$r = wp_parse_args( $args, array(
+		'number'  => -1,
+		'orderby' => 'display_name'		
+	) );
+
+	// Filter arguments
+	$r = apply_filters( 'wp_get_eligable_user_children', $r, $args );
+
+	// Return users
+	return get_users( $r );
+}
+
+/**
+ * Prefer first & last name over display_name setting
+ *
+ * @since 0.1.0
+ *
+ * @param object $user
+ */
+function wp_user_parents_prefer_fullname( $user = null ) {
+
+	// Bail if not a user object
+	if ( ! is_a( $user, 'WP_User' ) ) {
+		return false;
+	}
+
+	// Set filter to display
+	$user->filter = 'display';
+
+	// Prefer first & last name, fallback to display name
+	if ( ! empty( $user->first_name ) && ! empty( $user->last_name ) ) {
+		$display_name = "{$user->first_name} {$user->last_name}";
+	} else {
+		$display_name = $user->display_name;
+	}
+
+	// Return the fullname, falling back to display_name
+	return $display_name;
+}
+
+/**
  * Register user meta keys & sanitization callbacks
  *
  * @since 0.1.0
