@@ -20,17 +20,15 @@
  */
 function _wp_user_parents() {
 
-	// Vars
-	$url = wp_user_parents_get_plugin_url();
-	$ver = wp_user_parents_get_asset_version();
+	// Get the plugin path
+	$plugin_path = plugin_dir_path( __FILE__ );
 
-	// Styles
-	wp_enqueue_style( 'wp-user-parents', $url . 'assets/css/wp-user-parents.css',  array(), $ver );
-
-	// Scripts
-	wp_enqueue_script( 'wp-user-parents', $url . 'assets/js/wp-user-parents.js',  array( 'jquery' ), $ver, true );
+	// Required Files
+	require_once $plugin_path . 'includes/functions.php';
+	require_once $plugin_path . 'includes/metaboxes.php';
+	require_once $plugin_path . 'includes/hooks.php';
 }
-add_action( 'admin_enqueue_scripts', '_wp_user_parents' );
+add_action( 'plugins_loaded', '_wp_user_parents' );
 
 /**
  * Return the plugin's URL
