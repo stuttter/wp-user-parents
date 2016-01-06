@@ -118,7 +118,7 @@ function wp_user_profiles_do_row( $args = array() ) {
 	if ( current_user_can( "edit_user_{$r['type']}", $r['user'] ) ) {
 
 		// Get users
-		$r['users'] = call_user_func( "wp_get_eligable_user_{$r['type']}", array(
+		$r['users'] = call_user_func( "wp_get_eligible_user_{$r['type']}", array(
 			'exclude' => array_merge( $r[ $op_ids ], array( $r['user']->ID ) )
 		) );
 
