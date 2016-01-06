@@ -1,0 +1,17 @@
+{
+  "name": "stuttter/wp-user-parents",
+  "description": "Allow parent users to manage their children",
+  "homepage": "https://github.com/stuttter/wp-user-parents",
+  "type": "wordpress-plugin",
+  "require": {
+    "php": ">=5.2",
+    "composer/installers": "^1.0"
+  },
+  "license": "GPLv2 or later",
+  "authors": [
+    {
+      "name": "John James Jacoby",
+      "email": "johnjamesjacoby@me.com"
+    }
+  ]
+}
