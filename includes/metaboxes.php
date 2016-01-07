@@ -114,8 +114,8 @@ function wp_user_profiles_do_row( $args = array() ) {
 	// Set empty users array
 	$r['users'] = array();
 
-	// User can edit parents
-	if ( current_user_can( "edit_user_{$r['type']}", $r['user'] ) ) {
+	// User can edit
+	if ( user_can( $r['user']->ID, "edit_user_{$r['type']}", $r['user'] ) ) {
 
 		// Get users
 		$r['users'] = call_user_func( "wp_get_eligible_user_{$r['type']}", array(
@@ -127,11 +127,11 @@ function wp_user_profiles_do_row( $args = array() ) {
 			$r['users'] = wp_user_parents_get_specific_users( $r[ $cur_ids ] );
 		}
 
-	// User can view parents
-	} elseif ( current_user_can( "view_user_{$r['type']}", $r['user'] ) ) {
+	// User can view
+	} elseif ( user_can( $r['user']->ID, "view_user_{$r['type']}", $r['user'] ) ) {
 		$r['users'] = wp_user_parents_get_specific_users( $r[ $cur_ids ] );
 
-	// User can neither edit nor view, so return
+	// User cannot edit or view, so return
 	} else {
 		return;
 	}
@@ -169,7 +169,7 @@ function wp_user_parents_output_row( $args = array() ) {
 	?><tr class="user-<?php echo esc_attr( $r['type'] ); ?>-wrap"><?php
 
 	// Edit
-	if ( current_user_can( "edit_user_{$r['type']}", $r['user'] ) ) :
+	if ( user_can( $r['user']->ID, "edit_user_{$r['type']}", $r['user'] ) ) :
 
 		// Users to list
 		if ( ! empty( $r['users'] ) ) :
@@ -189,7 +189,7 @@ function wp_user_parents_output_row( $args = array() ) {
 
 		// No users to list
 		else : ?><th><label><?php echo esc_html( $labels['label'] ); ?></label></th>
-			<td><?php echo $labels['empty']; ?></td><?php
+			<td><?php echo esc_html( $labels['empty'] ); ?></td><?php
 		endif;
 
 	// View
@@ -256,17 +256,17 @@ function wp_user_parents_get_row_labels( $type = '' ) {
 	// Set some variables to help with querying users
 	if ( 'parents' === $type ) {
 		$labels = array(
-			'label'  => esc_html__( 'Parents',            'wp-user-parents' ),
-			'select' => esc_html__( 'Select parents',     'wp-user-parents' ),
-			'no'     => esc_html__( 'No parents',         'wp-user-parents' ),
-			'empty'  => esc_html__( 'No available users', 'wp-user-parents' )
+			'label'  => esc_html__( 'Parents',              'wp-user-parents' ),
+			'select' => esc_html__( 'Select parents',       'wp-user-parents' ),
+			'no'     => esc_html__( 'No parents',           'wp-user-parents' ),
+			'empty'  => esc_html__( 'No available parents', 'wp-user-parents' )
 		);
 	} elseif ( 'children' === $type ) {
 		$labels = array(
-			'label'  => esc_html__( 'Children',           'wp-user-parents' ),
-			'select' => esc_html__( 'Select children',    'wp-user-parents' ),
-			'no'     => esc_html__( 'No children',        'wp-user-parents' ),
-			'empty'  => esc_html__( 'No available users', 'wp-user-parents' )
+			'label'  => esc_html__( 'Children',              'wp-user-parents' ),
+			'select' => esc_html__( 'Select children',       'wp-user-parents' ),
+			'no'     => esc_html__( 'No children',           'wp-user-parents' ),
+			'empty'  => esc_html__( 'No available children', 'wp-user-parents' )
 		);
 	}
 
