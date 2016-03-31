@@ -20,7 +20,7 @@ function wp_user_parents_add_section( $sections = array() ) {
 
 	// Bail if cannot have or view children
 	if ( ! current_user_can( 'have_user_children' ) || ! current_user_can( 'view_user_children' ) ) {
-		return;
+		return $sections;
 	}
 
 	// Events
