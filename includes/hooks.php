@@ -26,4 +26,5 @@ add_action( wp_get_user_parents_section_hook(), 'wp_user_parents_add_meta_boxes'
 add_action( 'admin_enqueue_scripts', 'wp_user_parents_admin_assets' );
 
 // User Dashboard
-add_filter( 'wp_user_dashboard_get_sections', 'wp_user_parents_add_section' );
+add_filter( 'wp_user_dashboard_get_sections',       'wp_user_parents_add_section' );
+add_action( 'wp_user_dashboard_children_add_child', 'wp_user_parents_add_child'   );
