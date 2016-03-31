@@ -31,6 +31,7 @@ function _wp_user_parents() {
 	require_once $plugin_path . 'includes/capabilities.php';
 	require_once $plugin_path . 'includes/functions.php';
 	require_once $plugin_path . 'includes/metaboxes.php';
+	require_once $plugin_path . 'includes/user-dashboard.php';
 	require_once $plugin_path . 'includes/hooks.php';
 }
 add_action( 'plugins_loaded', '_wp_user_parents' );
