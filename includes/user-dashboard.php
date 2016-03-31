@@ -68,14 +68,14 @@ function wp_user_parents_add_child() {
 	$username  = ! empty( $_REQUEST['username']  ) ? $_REQUEST['username']  : "{$firstname}-{$lastname}";
 
 	// Names are empty
-	if ( empty( $firstname ) || empty( $lastname ) ) {
+	if ( empty( $firstname ) || empty( $lastname ) || strlen( $firstname ) < 2 || strlen( $lastname ) < 2 ) {
 		$args     = array( 'error' => 'name' );
 		$url      = wp_get_user_dashboard_url( 'children' );
 		$redirect = add_query_arg( $args, $url );
 	}
 
 	// Username exists
-	if ( username_exists( $username ) ) {
+	if ( username_exists( $username ) || strlen( $username ) < 4 ) {
 		$args     = array( 'error' => 'username' );
 		$url      = wp_get_user_dashboard_url( 'children' );
 		$redirect = add_query_arg( $args, $url );
