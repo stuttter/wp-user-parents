@@ -223,6 +223,7 @@ function wp_user_parents_get_specific_users( $user_ids = array() ) {
 
 	// Return users
 	$users = get_users( array(
+		'number'  => -1,
 		'include' => $user_ids,
 		'orderby' => 'display_name'
 	) );
