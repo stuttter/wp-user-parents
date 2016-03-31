@@ -25,7 +25,7 @@ function wp_user_parents_add_section( $sections = array() ) {
 		'url'          => '',
 		'label'        => esc_html__( 'Children', 'wp-user-parents' ),
 		'show_in_menu' => true,
-		'order'        => 90
+		'order'        => 150
 	);
 
 	// Return sections
