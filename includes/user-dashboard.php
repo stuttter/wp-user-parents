@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Filter sections and add "Children" section
  *
- * @since 0.3.0
+ * @since 0.1.0
  *
  * @param array $sections
  */
