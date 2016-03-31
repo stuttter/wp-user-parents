@@ -67,6 +67,13 @@ function wp_user_parents_add_child() {
 	$password  = ! empty( $_REQUEST['password']  ) ? $_REQUEST['password']  : wp_generate_password( 12, false );
 	$username  = ! empty( $_REQUEST['username']  ) ? $_REQUEST['username']  : "{$firstname}-{$lastname}";
 
+	// Names are empty
+	if ( empty( $firstname ) || empty( $lastname ) ) {
+		$args     = array( 'error' => 'name' );
+		$url      = wp_get_user_dashboard_url( 'children' );
+		$redirect = add_query_arg( $args, $url );
+	}
+
 	// Username exists
 	if ( username_exists( $username ) ) {
 		$args     = array( 'error' => 'username' );
