@@ -94,11 +94,14 @@ function wp_user_parents_add_child() {
 		exit;
 	}
 
+	// Filter the default child role
+	$role = apply_filters( 'wp_user_parents_default_role', get_option( 'default_role' ) );
+
 	// Requires activation
 	if ( is_multisite() && apply_filters( 'wp_join_page_requires_activation', true ) ) {
 		wpmu_signup_user( $username, $email, array(
 			'add_to_blog' => get_current_blog_id(),
-			'new_role'    => get_option( 'default_role' ),
+			'new_role'    => $role,
 			'first_name'  => $firstname,
 			'last_name'   => $lastname,
 		) );
@@ -120,7 +123,7 @@ function wp_user_parents_add_child() {
 
 	// Get new userdata
 	$user = new WP_User( $user_id );
-	$user->add_role( 'pending' );
+	$user->add_role( $role );
 
 	// Get the current user ID
 	$current_user_id = get_current_user_id();
