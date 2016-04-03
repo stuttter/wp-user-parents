@@ -126,8 +126,8 @@ function wp_user_parents_add_child() {
 	$current_user_id = get_current_user_id();
 
 	// Save fullname to usermeta
-	update_user_meta( $user->ID, 'first_name', $_REQUEST['firstname'] );
-	update_user_meta( $user->ID, 'last_name',  $_REQUEST['lastname']  );
+	update_user_meta( $user->ID, 'first_name', $firstname );
+	update_user_meta( $user->ID, 'last_name',  $lastname  );
 	add_user_meta( $user->ID, 'user_parent', $current_user_id, false );
 
 	// Do action
