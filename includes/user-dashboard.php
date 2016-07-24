@@ -74,16 +74,18 @@ function wp_user_parents_add_child() {
 		$redirect = add_query_arg( $args, $url );
 	}
 
-	// Username exists
+	// Username validation
+	$username = preg_replace( '/\s+/', '', sanitize_user( $username, true ) );
+	$username = esc_html( sanitize_key( $username ) );
 	if ( username_exists( $username ) || strlen( $username ) < 4 ) {
 		$args     = array( 'error' => 'username' );
 		$url      = wp_get_user_dashboard_url( 'children' );
 		$redirect = add_query_arg( $args, $url );
 	}
 
-	// Email exists
-	if ( email_exists( $email ) ) {
-		$args     = array( 'error' => 'username' );
+	// Email validation
+	if ( empty( $email ) || ! is_email( $email ) || email_exists( $email ) ) {
+		$args     = array( 'error' => 'email' );
 		$url      = wp_get_user_dashboard_url( 'children' );
 		$redirect = add_query_arg( $args, $url );
 	}
@@ -107,14 +109,8 @@ function wp_user_parents_add_child() {
 		) );
 	}
 
-	// Create the user account
-	$user_id = wpmu_create_user(
-		esc_html( sanitize_key( $username ) ),
-		$password,
-		$email
-	);
-
-	// Bail if no user ID for site
+	// User validation
+	$user_id = wp_create_user( $username, $password, $email );
 	if ( empty( $user_id ) ) {
 		$args     = array( 'error' => 'unknown' );
 		$url      = wp_get_user_dashboard_url( 'children' );
@@ -123,14 +119,22 @@ function wp_user_parents_add_child() {
 
 	// Get new userdata
 	$user = new WP_User( $user_id );
-	$user->add_role( $role );
 
-	// Get the current user ID
-	$current_user_id = get_current_user_id();
+	// Newly created users have no roles or caps until they are added to a blog
+	delete_user_option( $user->ID, 'capabilities' );
+	delete_user_option( $user->ID, 'user_level'   );
+
+	// Add default role
+	$user->add_role( $role );
 
 	// Save fullname to usermeta
 	update_user_meta( $user->ID, 'first_name', $firstname );
 	update_user_meta( $user->ID, 'last_name',  $lastname  );
+
+	// Get the current user ID
+	$current_user_id = get_current_user_id();
+
+	// Add the relationship to usermeta
 	add_user_meta( $user->ID, 'user_parent', $current_user_id, false );
 
 	// Do action
