@@ -57,7 +57,7 @@ function wp_user_parents_map_meta_cap( $caps = array(), $cap = '', $user_id = 0,
 		// Edit
 		case 'edit_user_parents'  :
 		case 'edit_user_children' :
-			$new_caps = array( 'exist' );
+			$new_caps = array( $cap );
 			break;
 	}
 
