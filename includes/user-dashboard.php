@@ -60,40 +60,33 @@ function wp_user_parents_add_child() {
 	}
 
 	// Sanitize fields
-	$redirect  = false;
-	$email     = sanitize_email( $_REQUEST['email'] );
+	$email     = ! empty( $_REQUEST['email']     ) ? $_REQUEST['email']     : '';
 	$firstname = ! empty( $_REQUEST['firstname'] ) ? $_REQUEST['firstname'] : '';
 	$lastname  = ! empty( $_REQUEST['lastname']  ) ? $_REQUEST['lastname']  : '';
-	$password  = ! empty( $_REQUEST['password']  ) ? $_REQUEST['password']  : wp_generate_password( 12, false );
+	$password  = ! empty( $_REQUEST['password']  ) ? $_REQUEST['password']  : '';
 	$username  = ! empty( $_REQUEST['username']  ) ? $_REQUEST['username']  : "{$firstname}-{$lastname}";
 
 	// Names are empty
 	if ( empty( $firstname ) || empty( $lastname ) || strlen( $firstname ) < 2 || strlen( $lastname ) < 2 ) {
-		$args     = array( 'error' => 'name' );
-		$url      = wp_get_user_dashboard_url( 'children' );
-		$redirect = add_query_arg( $args, $url );
+		wp_user_parents_dashboard_redirect( array( 'error' => 'name' ) );
+	}
+
+	// Password validation
+	if ( empty( $password ) ) {
+		wp_user_parents_dashboard_redirect( array( 'error' => 'password' ) );
 	}
 
 	// Username validation
 	$username = preg_replace( '/\s+/', '', sanitize_user( $username, true ) );
 	$username = esc_html( sanitize_key( $username ) );
-	if ( username_exists( $username ) || strlen( $username ) < 4 ) {
-		$args     = array( 'error' => 'username' );
-		$url      = wp_get_user_dashboard_url( 'children' );
-		$redirect = add_query_arg( $args, $url );
+	if ( empty( $username ) || username_exists( $username ) || strlen( $username ) < 4 ) {
+		wp_user_parents_dashboard_redirect( array( 'error' => 'username' ) );
 	}
 
 	// Email validation
+	$email = sanitize_email( $email );
 	if ( empty( $email ) || ! is_email( $email ) || email_exists( $email ) ) {
-		$args     = array( 'error' => 'email' );
-		$url      = wp_get_user_dashboard_url( 'children' );
-		$redirect = add_query_arg( $args, $url );
-	}
-
-	// Redirect
-	if ( ! empty( $redirect ) ) {
-		wp_safe_redirect( $redirect );
-		exit;
+		wp_user_parents_dashboard_redirect( array( 'error' => 'email' ) );
 	}
 
 	// Filter the default child role
@@ -112,9 +105,7 @@ function wp_user_parents_add_child() {
 	// User validation
 	$user_id = wp_create_user( $username, $password, $email );
 	if ( empty( $user_id ) ) {
-		$args     = array( 'error' => 'unknown' );
-		$url      = wp_get_user_dashboard_url( 'children' );
-		$redirect = add_query_arg( $args, $url );
+		wp_user_parents_dashboard_redirect( array( 'error' => 'unknown' ) );
 	}
 
 	// Get new userdata
@@ -141,7 +132,17 @@ function wp_user_parents_add_child() {
 	do_action( 'wp_user_parents_added_child', $user, $current_user_id );
 
 	// Redirect
-	$args     = array( 'success' => 'yay' );
+	wp_user_parents_dashboard_redirect( array( 'success' => 'yay' ) );
+}
+
+/**
+ * Redirect user back to children page, with feedback
+ *
+ * @since 0.1.0
+ *
+ * @param array $args
+ */
+function wp_user_parents_dashboard_redirect( $args = array() ) {
 	$url      = wp_get_user_dashboard_url( 'children' );
 	$redirect = add_query_arg( $args, $url );
 	wp_safe_redirect( $redirect );
