@@ -62,6 +62,11 @@ function wp_get_user_parents( $user_id = 0 ) {
  */
 function wp_get_user_children( $user_id = 0 ) {
 
+	// Use current user ID if none were passed
+	$user_id = ! empty( $user_id )
+		? (int) $user_id
+		: get_current_user_id();
+
 	// Get children IDs
 	$ids = get_users( array(
 		'meta_key'   => 'user_parent',
