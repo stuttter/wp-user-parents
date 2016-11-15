@@ -229,7 +229,7 @@ function wp_user_parents_get_specific_users( $user_ids = array() ) {
 	) );
 
 	// Bail if no users found
-	if ( is_wp_error( $users ) || empty( $users ) ) {
+	if ( empty( $users ) || is_wp_error( $users ) ) {
 		return array();
 	}
 
