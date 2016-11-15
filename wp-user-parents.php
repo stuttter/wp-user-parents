@@ -9,8 +9,8 @@
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Description: Allow parent users to manage their children
  * Version:     0.1.0
- * Text Domain: wp-user-parents
- * Domain Path: /assets/lang/
+ * Text Domain: 
+ * Domain Path: /wp-user-parents/assets/languages/
  */
 
 // Exit if accessed directly
@@ -24,7 +24,7 @@ defined( 'ABSPATH' ) || exit;
 function _wp_user_parents() {
 
 	// Get the plugin path
-	$plugin_path = plugin_dir_path( __FILE__ );
+	$plugin_path = plugin_dir_path( __FILE__ ). 'wp-user-parents/';
 
 	// Required Files
 	require_once $plugin_path . 'includes/admin.php';
@@ -44,7 +44,7 @@ add_action( 'plugins_loaded', '_wp_user_parents' );
  * @return string
  */
 function wp_user_parents_get_plugin_url() {
-	return plugin_dir_url( __FILE__ );
+	return plugin_dir_url( __FILE__ ) . 'wp-user-parents/';
 }
 
 /**

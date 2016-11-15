@@ -16,7 +16,7 @@ Think of WP User Parents as a user delegation system for WordPress. Users can ap
 
 It works by setting a `user_parent` user meta key with a meta value of the user ID that is a parent.
 
-This allows multiple users to have both multiple parents and mulitple children.
+This allows multiple users to have both multiple parents and multiple children.
 
 ### Where can I get support?
 

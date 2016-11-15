@@ -1,8 +1,8 @@
-=== WP User Profiles ===
+=== WP User Parents ===
 Contributors: johnjamesjacoby, stuttter
-Tags: users, user, profile, edit, metabox
+Tags: users, user, hierarchy, edit, metabox
 Requires at least: 4.4
-Tested up to: 4.4
+Tested up to: 4.7
 Stable tag: 0.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
