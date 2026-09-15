@@ -8,6 +8,8 @@ License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9Q4F4EL5YJ62J
 
+Allow parent users to manage their children in WordPress.
+
 == Description ==
 
 Allows parent users to manage their children.
